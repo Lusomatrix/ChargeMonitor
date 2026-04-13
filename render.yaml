@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: charge-monitor
+    env: node
+    plan: free
+    startCommand: npm start
+    branch: main
+    buildCommand: npm install
+    
+    envVars:
+      - key: PORT
+        scope: runtime
+        value: 3000
+      
+      - key: NODE_ENV
+        value: production
+      
+      - key: VITE_CHIRPSTACK_API_URL
+        scope: build
+        sync: false
+      
+      - key: VITE_CHIRPSTACK_DEVICE_ID
+        scope: build
+        sync: false
+      
+      - key: VITE_CHIRPSTACK_AUTH_TOKEN
+        scope: build
+        sync: false
+      
+      - key: RELAY_AUTH_TOKEN
+        scope: build
+        sync: false
+      
+      - key: ALLOWED_ORIGINS
+        scope: build
+        sync: false

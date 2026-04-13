@@ -1,0 +1,156 @@
+/* ════════════════════════════════════════════════════════════════
+   ANIMATIONS — All Keyframe Definitions
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Blink Animation (used by badges, indicators) ─────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── Ring Pulse Animation (ambient rings in hero) ────────── */
+@keyframes ring-pulse {
+  0% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  50% {
+    opacity: 0.15;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+}
+
+/* ── Ground Glow Pulse (ground beneath car) ──────────────── */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ── Arc Drawing Animation (energy arcs) ────────────────── */
+@keyframes arc-in {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── Arc Flicker Animation (energy arcs shimmer) ────────── */
+@keyframes arc-flicker {
+  0%, 100% { opacity: 1; }
+  40% { opacity: 0.3; }
+  60% { opacity: 0.95; }
+}
+
+/* ── Spark Pop Animation (top sparks) ────────────────────── */
+@keyframes spark-pop {
+  from {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  to {
+    opacity: 0.15;
+    transform: scaleY(0.3);
+  }
+}
+
+/* ── Dot Movement Left Arc ─────────────────────────────── */
+@keyframes dot-left {
+  0% {
+    opacity: 0;
+    transform: translate(58px, 142px);
+  }
+  8% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate(22px, 91px);
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(58px, 40px);
+  }
+}
+
+/* ── Dot Movement Right Arc ────────────────────────────── */
+@keyframes dot-right {
+  0% {
+    opacity: 0;
+    transform: translate(302px, 142px);
+  }
+  8% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate(338px, 91px);
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(302px, 40px);
+  }
+}
+
+/* ── Car Glow Pulse ────────────────────────────────────── */
+@keyframes car-glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  30% { opacity: 0.8; }
+}
+
+/* ── Car Float Animation (gentle side movement) ────────── */
+@keyframes car-float {
+  0%, 100% {
+    transform: rotate(90deg) scale(1.0) translateX(0px);
+  }
+  50% {
+    transform: rotate(90deg) scale(1.0) translateX(-12px);
+  }
+}
+
+/* ── Car Pulse on Charge (glow + scale) ───────────────── */
+@keyframes car-pulse {
+  0%, 100% {
+    filter: brightness(0.72) invert(0.92)
+            drop-shadow(0 0 16px rgba(79, 195, 247, 0.5))
+            drop-shadow(0 0 32px rgba(79, 195, 247, 0.6))
+            drop-shadow(0 0 2px #fff);
+    transform: rotate(90deg) scale(1.0);
+  }
+  50% {
+    filter: brightness(0.85) invert(0.97)
+            drop-shadow(0 0 24px rgba(79, 195, 247, 0.7))
+            drop-shadow(0 0 48px rgba(79, 195, 247, 0.8))
+            drop-shadow(0 0 3px #fff);
+    transform: rotate(90deg) scale(1.03);
+  }
+}
+
+/* ── Gauge Flicker (number animation) ──────────────────── */
+@keyframes gauge-flicker {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* ── Value Pop Animation (metrics update) ────────────── */
+@keyframes val-pop {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* ── Brand Glow (footer animation) ────────────────────── */
+@keyframes brand-glow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* ── Gauge Glow Pulse (charging indicator glow) ──────────– */
+@keyframes gauge-glow {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(79, 195, 247, 0.6)) drop-shadow(0 0 12px rgba(79, 195, 247, 0.3)); }
+  50% { filter: drop-shadow(0 0 10px rgba(79, 195, 247, 0.8)) drop-shadow(0 0 20px rgba(79, 195, 247, 0.5)); }
+}

@@ -1,0 +1,95 @@
+/* ════════════════════════════════════════════════════════════════
+   GAUGE — Power/Charging Level Visualization
+   ════════════════════════════════════════════════════════════════ */
+
+.gauge-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 1px rgba(79, 195, 247, 0.1));
+}
+
+/* ── Gauge Track (background arc) ───────────────────────– */
+.g-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.06);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+/* ── Gauge Fill (animated progress arc) ─────────────────– */
+.g-fill {
+  fill: none;
+  stroke: url(#arcGrad);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0.0, 0.2, 1),
+              stroke 0.4s;
+  filter: drop-shadow(0 0 6px rgba(79, 195, 247, 0.6))
+          drop-shadow(0 0 12px rgba(79, 195, 247, 0.3));
+  animation: gauge-glow 2s ease-in-out infinite;
+}
+
+/* ── Gauge Glow (outer glow layer) ──────────────────────– */
+.g-glow {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  opacity: 0.2;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0.0, 0.2, 1),
+              opacity 0.4s;
+  pointer-events: none;
+  filter: blur(2px) drop-shadow(0 0 8px rgba(6, 182, 212, 0.4));
+}
+
+/* ── Gauge Labels (0% and 100% text) ────────────────────– */
+.g-lab {
+  font-family: var(--f-mono);
+  font-size: 7px;
+  fill: rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* ── Gauge Center Display ──────────────────────────────––*/
+.gauge-center {
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gauge-num {
+  font-family: var(--f-head);
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: -0.03em;
+  animation: gauge-flicker 0.1s ease-out;
+}
+
+.gauge-num sup {
+  font-size: 0.9rem;
+  color: var(--cyan);
+  vertical-align: super;
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+.gauge-sub {
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.35);
+  margin-top: 4px;
+  text-transform: uppercase;
+}

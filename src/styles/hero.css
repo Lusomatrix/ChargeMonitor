@@ -1,0 +1,666 @@
+/* ════════════════════════════════════════════════════════════════
+   HERO — Car Section with Energy Animations
+   ════════════════════════════════════════════════════════════════ */
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 12px;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* ── Gradient Background Layer ──────────────────────────── */
+.hero-gradient-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 400px 200px at center 30%, rgba(79, 195, 247, 0.06) 0%, transparent 65%),
+    radial-gradient(ellipse 350px 180px at center 50%, rgba(6, 182, 212, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Ambient Neon Rings ─────────────────────────────────– */
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid var(--blue);
+  opacity: 0;
+  pointer-events: none;
+  animation: ring-pulse 4s var(--ease-smooth) infinite;
+  box-shadow: 0 0 20px rgba(79, 195, 247, 0.2);
+}
+
+.r1 {
+  width: 280px;
+  height: 280px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 0s;
+  border-width: 1.5px;
+  box-shadow: 0 0 25px rgba(79, 195, 247, 0.3);
+}
+
+.r2 {
+  width: 360px;
+  height: 360px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 0.6s;
+  border-width: 1.2px;
+  box-shadow: 0 0 30px rgba(79, 195, 247, 0.2);
+}
+
+.r3 {
+  width: 440px;
+  height: 440px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 1.2s;
+  border-width: 1px;
+  box-shadow: 0 0 35px rgba(79, 195, 247, 0.15);
+}
+
+/* ── Ground Glow ────────────────────────────────────────– */
+.ground-glow {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 30px;
+  background: radial-gradient(ellipse, rgba(79, 195, 247, 0.3) 0%, transparent 70%);
+  filter: blur(12px);
+  pointer-events: none;
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* ── Energy Arcs SVG ────────────────────────────────────– */
+.energy-arcs {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 360px;
+  height: 160px;
+  pointer-events: none;
+  z-index: 1;
+  filter: drop-shadow(0 0 1px rgba(79, 195, 247, 0.2));
+}
+
+.earc {
+  fill: none;
+  stroke: var(--blue);
+  stroke-linecap: round;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+}
+
+.el1, .er1 {
+  stroke-width: 2;
+  animation: arc-in 1.6s var(--ease) forwards,
+             arc-flicker 3s 1.6s ease-in-out infinite;
+}
+
+.el2, .er2 {
+  stroke-width: 1;
+  opacity: 0.5;
+  animation: arc-in 2s 0.3s var(--ease) forwards,
+             arc-flicker 3.5s 2s ease-in-out infinite;
+}
+
+/* ── Spark Lines ────────────────────────────────────────– */
+.spark {
+  stroke: var(--cyan);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  animation: spark-pop 0.5s ease-out infinite alternate;
+}
+
+.spark-glow {
+  stroke: var(--blue);
+  stroke-width: 5;
+  stroke-linecap: round;
+  opacity: 0.25;
+  animation: spark-pop 0.5s ease-out infinite alternate;
+}
+
+.sp1, .sg1 { animation-delay: 0s; animation-duration: 0.6s; }
+.sp2, .sg2 { animation-delay: 0.18s; animation-duration: 0.5s; }
+.sp3, .sg3 { animation-delay: 0.1s; animation-duration: 0.7s; }
+
+/* ── Energy Dots ────────────────────────────────────────– */
+.edot { opacity: 0; }
+
+.ed1 { animation: dot-left 2.5s 1.2s ease-in-out infinite; }
+.ed2 { animation: dot-left 2.5s 1.9s ease-in-out infinite; }
+.ed3 { animation: dot-right 2.5s 1.5s ease-in-out infinite; }
+.ed4 { animation: dot-right 2.5s 2.2s ease-in-out infinite; }
+
+/* ── Car & Gauge Container ──────────────────────────────– */
+.hero > div,
+.hero > svg {
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Car Wrapper ────────────────────────────────────────– */
+.car-wrap {
+  position: relative;
+  z-index: 3;
+  width: 260px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px auto 20px;
+  flex-shrink: 0;
+}
+
+.car-glow-outer {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(ellipse, rgba(79, 195, 247, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(24px);
+  pointer-events: none;
+  animation: car-glow-pulse 3s ease-in-out infinite;
+  z-index: 0;
+}
+
+.car-floor-glow {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 40px;
+  background: radial-gradient(ellipse, rgba(79, 195, 247, 0.25) 0%, transparent 70%);
+  filter: blur(16px);
+  pointer-events: none;
+}
+
+.car-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform: scale(1.0);
+  filter: brightness(1.1) contrast(1.15)
+           drop-shadow(0 0 8px rgba(79, 195, 247, 0.7))
+           drop-shadow(0 0 16px rgba(79, 195, 247, 0.4));
+  animation: car-float 4s var(--ease-smooth) infinite;
+  transition: filter 0.4s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.car-img.charging {
+  transform: scale(1.05);
+  filter: brightness(1.15) contrast(1.2)
+          drop-shadow(0 0 10px rgba(79, 195, 247, 0.9))
+          drop-shadow(0 0 20px rgba(79, 195, 247, 0.6));
+  animation: car-float 4s var(--ease-smooth) infinite,
+             car-pulse 2s var(--ease-smooth) infinite;
+}
+
+/* ── Gauge Wrapper ──────────────────────────────────────– */
+.gauge-wrap {
+  position: relative;
+  z-index: 2;
+  width: 240px;
+  height: 140px;
+  margin: 16px auto 0;
+  flex-shrink: 0;
+  padding: 12px;
+  background:
+    radial-gradient(circle at center bottom, rgba(79, 195, 247, 0.1) 0%, transparent 60%);
+  border: 1px solid rgba(79, 195, 247, 0.2);
+  border-radius: 18px;
+  backdrop-filter: blur(8px);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE SIZES — Hero Elements Across Breakpoints
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Small phones (320px - 374px) */
+@media (max-width: 374px) {
+  .hero {
+    padding: 12px 8px;
+  }
+
+  .ring {
+    opacity: 0.3;
+  }
+
+  .r1 {
+    width: 200px;
+    height: 200px;
+    border-width: 1px;
+    box-shadow: 0 0 15px rgba(79, 195, 247, 0.2);
+  }
+
+  .r2 {
+    width: 260px;
+    height: 260px;
+    border-width: 0.8px;
+    box-shadow: 0 0 20px rgba(79, 195, 247, 0.15);
+  }
+
+  .r3 {
+    display: none;
+  }
+
+  .ground-glow {
+    width: 160px;
+    height: 20px;
+    bottom: 30px;
+    filter: blur(8px);
+  }
+
+  .energy-arcs {
+    max-width: 240px;
+    height: 100px;
+  }
+
+  .car-wrap {
+    width: 180px;
+    height: 110px;
+    margin: 12px auto 16px;
+  }
+
+  .car-glow-outer {
+    inset: -12px;
+    filter: blur(16px);
+  }
+
+  .car-floor-glow {
+    width: 150px;
+    height: 25px;
+    bottom: -20px;
+    filter: blur(12px);
+  }
+
+  .gauge-wrap {
+    width: 200px;
+    height: 110px;
+    margin: 12px auto 0;
+    padding: 10px;
+  }
+}
+
+/* Regular phones (375px - 424px) */
+@media (min-width: 375px) and (max-width: 424px) {
+  .hero {
+    padding: 14px 10px;
+  }
+
+  .ring {
+    opacity: 0.35;
+  }
+
+  .r1 {
+    width: 220px;
+    height: 220px;
+    border-width: 1.2px;
+    box-shadow: 0 0 18px rgba(79, 195, 247, 0.22);
+  }
+
+  .r2 {
+    width: 280px;
+    height: 280px;
+    border-width: 1px;
+    box-shadow: 0 0 22px rgba(79, 195, 247, 0.17);
+  }
+
+  .r3 {
+    display: none;
+  }
+
+  .ground-glow {
+    width: 180px;
+    height: 25px;
+    bottom: 32px;
+    filter: blur(10px);
+  }
+
+  .energy-arcs {
+    max-width: 280px;
+    height: 120px;
+  }
+
+  .car-wrap {
+    width: 210px;
+    height: 128px;
+    margin: 14px auto 18px;
+  }
+
+  .car-glow-outer {
+    inset: -14px;
+    filter: blur(18px);
+  }
+
+  .car-floor-glow {
+    width: 180px;
+    height: 30px;
+    bottom: -22px;
+    filter: blur(13px);
+  }
+
+  .gauge-wrap {
+    width: 220px;
+    height: 125px;
+    margin: 14px auto 0;
+    padding: 11px;
+  }
+}
+
+/* Large phones (425px - 599px) */
+@media (min-width: 425px) and (max-width: 599px) {
+  .hero {
+    padding: 16px 12px;
+  }
+
+  .ring {
+    opacity: 0.4;
+  }
+
+  .r1 {
+    width: 250px;
+    height: 250px;
+    border-width: 1.3px;
+    box-shadow: 0 0 20px rgba(79, 195, 247, 0.25);
+  }
+
+  .r2 {
+    width: 320px;
+    height: 320px;
+    border-width: 1.1px;
+    box-shadow: 0 0 25px rgba(79, 195, 247, 0.18);
+  }
+
+  .r3 {
+    width: 390px;
+    height: 390px;
+    border-width: 0.9px;
+    box-shadow: 0 0 30px rgba(79, 195, 247, 0.12);
+  }
+
+  .ground-glow {
+    width: 200px;
+    height: 28px;
+    bottom: 35px;
+    filter: blur(11px);
+  }
+
+  .energy-arcs {
+    max-width: 320px;
+    height: 140px;
+  }
+
+  .car-wrap {
+    width: 240px;
+    height: 145px;
+    margin: 15px auto 20px;
+  }
+
+  .car-glow-outer {
+    inset: -16px;
+    filter: blur(20px);
+  }
+
+  .car-floor-glow {
+    width: 210px;
+    height: 35px;
+    bottom: -25px;
+    filter: blur(14px);
+  }
+
+  .gauge-wrap {
+    width: 235px;
+    height: 135px;
+    margin: 15px auto 0;
+    padding: 12px;
+  }
+}
+
+/* Tablets (600px - 767px) */
+@media (min-width: 600px) and (max-width: 767px) {
+  .hero {
+    padding: 18px 14px;
+  }
+
+  .ring {
+    opacity: 0.45;
+  }
+
+  .r1 {
+    width: 270px;
+    height: 270px;
+    border-width: 1.4px;
+    box-shadow: 0 0 22px rgba(79, 195, 247, 0.27);
+  }
+
+  .r2 {
+    width: 340px;
+    height: 340px;
+    border-width: 1.2px;
+    box-shadow: 0 0 27px rgba(79, 195, 247, 0.2);
+  }
+
+  .r3 {
+    width: 410px;
+    height: 410px;
+    border-width: 1px;
+    box-shadow: 0 0 32px rgba(79, 195, 247, 0.15);
+  }
+
+  .ground-glow {
+    width: 220px;
+    height: 32px;
+    bottom: 38px;
+    filter: blur(13px);
+  }
+
+  .energy-arcs {
+    max-width: 340px;
+    height: 150px;
+  }
+
+  .car-wrap {
+    width: 260px;
+    height: 160px;
+    margin: 16px auto 22px;
+  }
+
+  .car-glow-outer {
+    inset: -18px;
+    filter: blur(22px);
+  }
+
+  .car-floor-glow {
+    width: 230px;
+    height: 38px;
+    bottom: -28px;
+    filter: blur(15px);
+  }
+
+  .gauge-wrap {
+    width: 250px;
+    height: 145px;
+    margin: 16px auto 0;
+    padding: 13px;
+  }
+}
+
+/* Tablets large (768px - 899px) */
+@media (min-width: 768px) and (max-width: 899px) {
+  .hero {
+    padding: 20px 16px;
+  }
+
+  .ring {
+    opacity: 0.5;
+  }
+
+  .r1 {
+    width: 280px;
+    height: 280px;
+    border-width: 1.5px;
+    box-shadow: 0 0 25px rgba(79, 195, 247, 0.3);
+  }
+
+  .r2 {
+    width: 360px;
+    height: 360px;
+    border-width: 1.2px;
+    box-shadow: 0 0 30px rgba(79, 195, 247, 0.2);
+  }
+
+  .r3 {
+    width: 440px;
+    height: 440px;
+    border-width: 1px;
+    box-shadow: 0 0 35px rgba(79, 195, 247, 0.15);
+  }
+
+  .ground-glow {
+    width: 240px;
+    height: 30px;
+    bottom: 40px;
+    filter: blur(12px);
+  }
+
+  .energy-arcs {
+    max-width: 360px;
+    height: 160px;
+  }
+
+  .car-wrap {
+    width: 280px;
+    height: 170px;
+    margin: 18px auto 24px;
+  }
+
+  .car-glow-outer {
+    inset: -20px;
+    filter: blur(24px);
+  }
+
+  .car-floor-glow {
+    width: 240px;
+    height: 40px;
+    bottom: -30px;
+    filter: blur(16px);
+  }
+
+  .gauge-wrap {
+    width: 260px;
+    height: 150px;
+    margin: 18px auto 0;
+    padding: 12px;
+  }
+}
+
+/* Desktop small (900px - 1023px) */
+@media (min-width: 900px) and (max-width: 1023px) {
+  .hero {
+    padding: 28px 0;
+  }
+
+  .car-wrap {
+    width: 280px;
+    height: 170px;
+    margin: 0 auto 22px;
+  }
+
+  .gauge-wrap {
+    width: 260px;
+    height: 150px;
+    margin: 22px auto 0;
+  }
+}
+
+/* Desktop medium (1024px - 1199px) */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .hero {
+    padding: 30px 0;
+  }
+
+  .car-wrap {
+    width: 290px;
+    height: 175px;
+    margin: 0 auto 23px;
+  }
+
+  .gauge-wrap {
+    width: 270px;
+    height: 155px;
+    margin: 23px auto 0;
+  }
+}
+
+/* Desktop large (1200px - 1439px) */
+@media (min-width: 1200px) and (max-width: 1439px) {
+  .hero {
+    padding: 32px 0;
+  }
+
+  .car-wrap {
+    width: 300px;
+    height: 180px;
+    margin: 0 auto 24px;
+  }
+
+  .gauge-wrap {
+    width: 280px;
+    height: 160px;
+    margin: 24px auto 0;
+  }
+}
+
+/* Desktop extra large (1440px - 1919px) */
+@media (min-width: 1440px) and (max-width: 1919px) {
+  .hero {
+    padding: 36px 0;
+  }
+
+  .car-wrap {
+    width: 320px;
+    height: 190px;
+    margin: 0 auto 28px;
+  }
+
+  .gauge-wrap {
+    width: 300px;
+    height: 170px;
+    margin: 28px auto 0;
+  }
+}
+
+/* Desktop ultra wide (1920px+) */
+@media (min-width: 1920px) {
+  .hero {
+    padding: 40px 0;
+  }
+
+  .car-wrap {
+    width: 360px;
+    height: 210px;
+    margin: 0 auto 32px;
+  }
+
+  .gauge-wrap {
+    width: 340px;
+    height: 190px;
+    margin: 32px auto 0;
+  }
+}

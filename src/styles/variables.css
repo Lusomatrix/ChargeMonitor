@@ -1,0 +1,36 @@
+/* ════════════════════════════════════════════════════════════════
+   VARIABLES — Design Tokens & Theme Configuration
+   ════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ── Colors: Backgrounds ─────────────────────────────────── */
+  --bg:       #05080f;
+  --surf:     #0b0f1a;
+  --card:     #0e1220;
+
+  /* ── Colors: Borders ─────────────────────────────────────── */
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.12);
+
+  /* ── Colors: Neon Palette ─────────────────────────────────── */
+  --blue:     #4fc3f7;      /* Primary neon cyan */
+  --blue-d:   #0ea5e9;      /* Darker blue */
+  --blue-dim: rgba(79,195,247,0.15);
+  --blue-glow:rgba(79,195,247,0.35);
+  --cyan:     #06b6d4;      /* Secondary cyan for accents */
+  --mint:     #34d399;      /* Green accent */
+  --gold:     #fbbf24;      /* Gold accent */
+  --danger:   #f87171;      /* Red/error state */
+  --ok:       #4ade80;      /* Green/success state */
+
+  /* ── Typography ──────────────────────────────────────────── */
+  --f-head:  'Rajdhani', sans-serif;
+  --f-body:  'Inter', sans-serif;
+  --f-mono:  'JetBrains Mono', monospace;
+
+  /* ── Easing Functions ────────────────────────────────────── */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);           /* Spring easing */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);      /* Smooth easing */
+}

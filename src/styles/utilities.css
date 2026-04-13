@@ -1,0 +1,126 @@
+/* ════════════════════════════════════════════════════════════════
+   UTILITIES — Connection Bar & Footer
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Connection Status Bar ──────────────────────────────– */
+.conn-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 12px 11px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, rgba(79, 195, 247, 0.06) 0%, rgba(79, 195, 247, 0.02) 100%);
+  border: 1.5px solid rgba(79, 195, 247, 0.15);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  transition: all 0.4s var(--ease-smooth);
+}
+
+.conn-bar:hover {
+  border-color: rgba(79, 195, 247, 0.25);
+  background: linear-gradient(135deg, rgba(79, 195, 247, 0.10) 0%, rgba(79, 195, 247, 0.03) 100%);
+}
+
+/* ── Connection Status Dot ──────────────────────────────– */
+.cb-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+  transition: all 0.4s;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+}
+
+.cb-dot.ok {
+  background: var(--ok);
+  box-shadow: 0 0 12px var(--ok), inset 0 0 4px rgba(255, 255, 255, 0.3);
+  animation: blink 2s infinite;
+}
+
+.cb-dot.err {
+  background: var(--danger);
+  box-shadow: 0 0 12px var(--danger), inset 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+/* ── Connection Info Section ────────────────────────────– */
+.cb-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cb-title {
+  font-family: var(--f-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.01em;
+}
+
+.cb-msg {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* ── Connection Time Display ────────────────────────────– */
+.cb-time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.cb-tl {
+  font-family: var(--f-mono);
+  font-size: 0.5rem;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.cb-tv {
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 600;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FOOTER — App Bottom Info & Branding
+   ════════════════════════════════════════════════════════════════ */
+
+.footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 16px 16px;
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.08em;
+  border-top: 1px solid rgba(79, 195, 247, 0.08);
+  background: rgba(79, 195, 247, 0.02);
+  text-transform: uppercase;
+}
+
+.f-brand {
+  color: var(--cyan);
+  font-weight: 600;
+  animation: brand-glow 3s ease-in-out infinite;
+}
+
+.f-v {
+  opacity: 0.4;
+}
+
+.footer span {
+  opacity: 0.6;
+}

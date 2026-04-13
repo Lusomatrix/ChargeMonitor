@@ -1,0 +1,628 @@
+/**
+ * Mobile-Optimized Styles
+ * 
+ * Otimizações específicas para dispositivos móveis
+ * Touch gestures, performance, e UX mobile
+ * Supports: iOS, Android, and all mobile browsers
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   TOUCH & GESTURE OPTIMIZATION — Coarse Pointer / Touch Devices
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects on touch devices */
+  button:hover,
+  .metric-card:hover,
+  .chart-card:hover,
+  .mc:hover,
+  .status-pill:hover,
+  .s-eta:hover,
+  .s-device:hover {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Increase minimum touch targets (44px = iOS standard) */
+  button,
+  .metric-card,
+  .chart-card,
+  .mc,
+  .status-pill,
+  .s-eta,
+  .s-device,
+  input,
+  select {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px;
+  }
+
+  /* Better feedback for touch interactions */
+  button,
+  .metric-card,
+  .mc,
+  .status-pill {
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  button:active {
+    opacity: 0.8;
+    transform: scale(0.96);
+  }
+
+  .metric-card:active,
+  .mc:active {
+    border-color: rgba(99, 210, 255, 0.5);
+    opacity: 0.9;
+  }
+
+  .status-pill:active {
+    transform: scale(0.98);
+  }
+
+  /* Disable text selection on interactive elements */
+  button,
+  .metric-card,
+  .chart-card,
+  .mc {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VERY SMALL PHONES (320px - 374px)
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 374px) {
+  /* Reduce padding on everywhere for small screens */
+  body {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .app {
+    padding: 6px;
+  }
+
+  header {
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-text h1 {
+    font-size: 12px;
+  }
+
+  .brand-text p {
+    font-size: 8px;
+  }
+
+  .time-display {
+    display: none;
+  }
+
+  .metrics-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .metric-card {
+    padding: 8px;
+  }
+
+  .metric-card .icon {
+    font-size: 14px;
+  }
+
+  .m-label {
+    font-size: 7px;
+  }
+
+  .m-value {
+    font-size: 11px;
+  }
+
+  .m-unit {
+    font-size: 5px;
+  }
+
+  .car-panel {
+    padding: 12px 8px;
+    margin-bottom: 8px;
+  }
+
+  .car-svg-wrap svg {
+    max-width: 85%;
+  }
+
+  .chart-card {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  #power-chart {
+    height: 60px;
+  }
+
+  .live-feed {
+    grid-template-columns: 1fr;
+  }
+
+  .section-label {
+    font-size: 8px;
+    margin-bottom: 8px;
+  }
+
+  /* Hide non-essential elements */
+  .time-display {
+    display: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SMALL PHONES (375px - 424px)
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 375px) and (max-width: 424px) {
+  body {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .app {
+    padding: 8px;
+  }
+
+  header {
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    gap: 10px;
+  }
+
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .brand-text h1 {
+    font-size: 13px;
+  }
+
+  .brand-text p {
+    font-size: 9px;
+  }
+
+  .metrics-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .metric-card {
+    padding: 10px;
+  }
+
+  .m-label {
+    font-size: 8px;
+  }
+
+  .m-value {
+    font-size: 13px;
+  }
+
+  .car-panel {
+    padding: 14px 10px;
+    margin-bottom: 12px;
+  }
+
+  .car-svg-wrap svg {
+    max-width: 90%;
+  }
+
+  .chart-card {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  #power-chart {
+    height: 70px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   REGULAR PHONES (425px - 599px)
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 425px) and (max-width: 599px) {
+  body {
+    font-size: 14.5px;
+  }
+
+  .app {
+    padding: 10px;
+  }
+
+  header {
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    gap: 12px;
+  }
+
+  .metrics-row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .metric-card {
+    padding: 12px;
+  }
+
+  .m-label {
+    font-size: 9px;
+  }
+
+  .m-value {
+    font-size: 14px;
+  }
+
+  .car-panel {
+    padding: 16px 12px;
+    margin-bottom: 14px;
+  }
+
+  .car-svg-wrap svg {
+    max-width: 95%;
+  }
+
+  .chart-card {
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  #power-chart {
+    height: 80px;
+  }
+
+  .live-feed {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LANDSCAPE ORIENTATION — Phones in Landscape (all sizes)
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .app {
+    min-height: auto;
+    padding: 6px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+  }
+
+  header {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+
+  .shell {
+    padding: 4px;
+    padding-top: max(4px, env(safe-area-inset-top));
+    padding-left: max(4px, env(safe-area-inset-left));
+    padding-right: max(4px, env(safe-area-inset-right));
+    padding-bottom: max(4px, env(safe-area-inset-bottom));
+  }
+
+  .brand-text h1 {
+    font-size: 11px;
+  }
+
+  .brand-text p {
+    font-size: 8px;
+  }
+
+  .metrics-row {
+    width: 100%;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    padding: 4px;
+  }
+
+  .metric-card {
+    padding: 6px;
+    min-height: 40px;
+  }
+
+  .metric-card .icon {
+    font-size: 14px;
+    margin-bottom: 0px;
+  }
+
+  .m-label {
+    font-size: 6px;
+    white-space: nowrap;
+  }
+
+  .m-value {
+    font-size: 9px;
+  }
+
+  .m-unit {
+    font-size: 5px;
+  }
+
+  .car-panel {
+    padding: 8px;
+    margin-bottom: 8px;
+    flex-shrink: 1;
+  }
+
+  .car-svg-wrap svg {
+    max-width: 80px;
+  }
+
+  .chart-card {
+    padding: 8px;
+    margin-bottom: 8px;
+    flex: 1;
+    min-width: 150px;
+  }
+
+  #power-chart {
+    height: 60px;
+  }
+
+  .live-feed {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .section-label {
+    display: none;
+  }
+
+  .time-display {
+    display: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INPUT & FORM OPTIMIZATION — Prevent Zoom on Mobile Input Focus
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea,
+  button {
+    font-size: 16px; /* Prevents auto-zoom on iOS */
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 8px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  input[type="password"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(99, 210, 255, 0.2);
+    background: rgba(99, 210, 255, 0.05);
+    color: #fff;
+    font-family: inherit;
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="password"]:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: rgba(99, 210, 255, 0.5);
+    background: rgba(99, 210, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(99, 210, 255, 0.1);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY & PERFORMANCE
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Prefers Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Disable animations */
+  .pulse-dot,
+  .blink,
+  .ring-pulse,
+  .glow-pulse,
+  .arc-in,
+  .arc-flicker,
+  .spark-pop,
+  .dot-left,
+  .dot-right,
+  .val-pop,
+  .energize {
+    animation: none !important;
+  }
+}
+
+/* Dark Mode Optimization */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+  }
+
+  input,
+  select,
+  textarea {
+    background: rgba(99, 210, 255, 0.05);
+    color: #fff;
+    border-color: rgba(99, 210, 255, 0.2);
+  }
+}
+
+/* Light Mode Support (if needed in future) */
+@media (prefers-color-scheme: light) {
+  body {
+    background: #f5f5f5;
+    color: #1a1a1a;
+  }
+}
+
+/* High-DPI Screens (Retina displays) */
+@media (min-device-pixel-ratio: 2),
+       (-webkit-min-device-pixel-ratio: 2),
+       (min-resolution: 192dpi) {
+  * {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Low-Power Mode (save battery) */
+@media (prefers-reduced-data: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NOTCH & SAFE AREA SUPPORT
+   ═══════════════════════════════════════════════════════════════ */
+
+@supports (padding: max(0px)) {
+  body {
+    padding-top: max(0px, env(safe-area-inset-top));
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+
+  header {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+
+  .app {
+    padding-left: max(10px, env(safe-area-inset-left));
+    padding-right: max(10px, env(safe-area-inset-right));
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   iOS SPECIFIC OPTIMIZATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Support for iOS status bar overlay */
+@supports (-webkit-touch-callout: none) {
+  body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  /* iOS momentum scrolling */
+  body,
+  .app {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Disable iOS button styling */
+  button,
+  input[type="button"],
+  input[type="reset"],
+  input[type="submit"] {
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 8px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANDROID SPECIFIC OPTIMIZATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Chrome on Android adjustments */
+@supports (-webkit-appearance: none) {
+  input,
+  select {
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path fill='%2363d2ff' d='M6 9L1 4h10z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 32px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VIEWPORT & SCREEN ORIENTATION
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Portrait orientation */
+@media (orientation: portrait) {
+  .app {
+    flex-direction: column;
+  }
+}
+
+/* Landscape orientation with height constraints */
+@media (orientation: landscape) and (max-height: 600px) {
+  body,
+  .app {
+    min-height: 100vh;
+  }
+
+  header {
+    flex-shrink: 0;
+  }
+
+  .metrics-row {
+    max-height: 100px;
+    overflow-y: auto;
+  }
+}

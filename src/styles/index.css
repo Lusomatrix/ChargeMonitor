@@ -1,0 +1,33 @@
+/* ════════════════════════════════════════════════════════════════
+   ChargeMonitor — Main CSS Index
+   
+   Import order is important for cascading:
+   1. Variables (tokens)
+   2. Reset (base styles)
+   3. Animations (keyframes)
+   4. Components (header, hero, etc)
+   5. Utilities (misc)
+   6. Responsive (media queries)
+   ════════════════════════════════════════════════════════════════ */
+
+/* Variables & Design Tokens */
+@import url('./variables.css');
+
+/* Global Reset & Base Styles */
+@import url('./reset.css');
+
+/* Keyframe Animations */
+@import url('./animations.css');
+
+/* Component Styles */
+@import url('./header.css');
+@import url('./hero.css');
+@import url('./gauge.css');
+@import url('./status.css');
+@import url('./metrics.css');
+
+/* Utilities & Miscellaneous */
+@import url('./utilities.css');
+
+/* Responsive & Media Queries (last for proper override) */
+@import url('./responsive.css');

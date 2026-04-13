@@ -1,0 +1,31 @@
+{
+  "name": "charge-monitor",
+  "version": "1.0.0",
+  "description": "Dashboard cyberpunk para monitorizar dados de carregamento via ChirpStack/TTN",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "prod": "NODE_ENV=production node server.js"
+  },
+  "keywords": [
+    "chirpstack",
+    "ttn",
+    "lorawan",
+    "dashboard",
+    "ev-charging"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": "18.x"
+  },
+  "dependencies": {
+    "compression": "^1.8.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^8.3.2",
+    "helmet": "^8.1.0",
+    "sqlite3": "^6.0.1"
+  }
+}

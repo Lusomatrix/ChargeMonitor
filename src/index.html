@@ -2109,9 +2109,9 @@ async function poll() {
   }
 }
 
-// First poll after 600ms, then every 3s
+// First poll on page load, then every 5s (reduces server load)
 poll(); // Load data immediately on page load
-setInterval(poll, 3000);
+setInterval(poll, 5000);
 
 // Update session duration every second
 setInterval(() => {

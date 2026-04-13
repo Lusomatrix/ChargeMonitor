@@ -29,13 +29,14 @@ app.use(helmet({
 // Compression middleware
 app.use(compression());
 
-// Rate Limiting - Geral
+// Rate Limiting - Geral (permissivo para polling contínuo)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // 100 requests por IP
+  max: 1000, // 1000 requests por IP (permite polling a cada 1-2s)
   message: "Muitos pedidos, tente novamente mais tarde",
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
+  skip: (req) => req.ip === '::1' || req.ip === '127.0.0.1' // Skip rate limit para localhost
 });
 app.use(limiter);
 

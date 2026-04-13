@@ -11,7 +11,20 @@ const url = require("url");
 require("dotenv").config();
 
 // Security Middleware
-app.use(helmet()); // Adiciona security headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+      imgSrc: ["'self'", "data:"],
+      fontSrc: ["'self'", "data:"],
+      connectSrc: ["'self'", "https://api.console.thethings.industries", "wss://*"],
+      frameSrc: ["'none'"]
+    }
+  },
+  crossOriginEmbedderPolicy: false
+}));
 
 // Compression middleware
 app.use(compression());

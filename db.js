@@ -1,35 +1,35 @@
 /**
- * Database Module - SQLite3
+ * Database Module - better-sqlite3 (Synchronous)
  * 
  * Manages persistent storage of sensor data with history
  * Allows displaying cached data when sensor is inactive
+ * Uses better-sqlite3 for Linux compatibility (compiles native module for target OS)
  */
 
-const sqlite3 = require('sqlite3').verbose();
+const Database = require('better-sqlite3');
 const path = require('path');
-const fs = require('fs');
 
 const DB_PATH = path.join(__dirname, 'chargeMonitor.db');
 
-class Database {
+class DatabaseManager {
   constructor() {
-    this.db = new sqlite3.Database(DB_PATH, (err) => {
-      if (err) {
-        console.error('❌ Erro ao abrir base de dados:', err.message);
-      } else {
-        console.log('✅ Base de dados SQLite3 conectada');
-        this.initialize();
-      }
-    });
+    try {
+      this.db = new Database(DB_PATH);
+      console.log('✅ Base de dados better-sqlite3 conectada');
+      this.initialize();
+    } catch (err) {
+      console.error('❌ Erro ao abrir base de dados:', err.message);
+      throw err;
+    }
   }
 
   /**
    * Initialize database schema
    */
   initialize() {
-    this.db.serialize(() => {
+    try {
       // Tabela para guardar todos os dados (histórico)
-      this.db.run(`
+      this.db.exec(`
         CREATE TABLE IF NOT EXISTS sensor_data (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           manufacturer TEXT,
@@ -52,16 +52,11 @@ class Database {
           f_cnt INTEGER,
           raw TEXT
         )
-      `, (err) => {
-        if (err) {
-          console.error('❌ Erro ao criar tabela sensor_data:', err.message);
-        } else {
-          console.log('✓ Tabela sensor_data pronta');
-        }
-      });
+      `);
+      console.log('✓ Tabela sensor_data pronta');
 
       // Tabela para guardar o último dado (cache rápido)
-      this.db.run(`
+      this.db.exec(`
         CREATE TABLE IF NOT EXISTS last_data (
           id INTEGER PRIMARY KEY,
           manufacturer TEXT,
@@ -84,85 +79,69 @@ class Database {
           f_cnt INTEGER,
           raw TEXT
         )
-      `, (err) => {
-        if (err) {
-          console.error('❌ Erro ao criar tabela last_data:', err.message);
-        } else {
-          console.log('✓ Tabela last_data pronta');
-        }
-      });
-    });
+      `);
+      console.log('✓ Tabela last_data pronta');
+    } catch (err) {
+      console.error('❌ Erro ao inicializar tabelas:', err.message);
+      throw err;
+    }
   }
 
   /**
    * Save sensor data to database
    * @param {Object} data - Sensor data object
-   * @returns {Promise<void>}
+   * @returns {number} ID do record inserido
    */
-  async saveSensorData(data) {
-    return new Promise((resolve, reject) => {
+  saveSensorData(data) {
+    try {
       const { manufacturer, voltage, currentMA, power, energy, timestamp, gatewayId, rssi, snr, frequency, channel, crcStatus, uplinkId, latitude, longitude, spreadingFactor, bandwidth, f_cnt, raw } = data;
 
       // Insert into historical data
-      this.db.run(
+      const insertStmt = this.db.prepare(
         `INSERT INTO sensor_data (manufacturer, voltage, currentMA, power, energy, timestamp, gatewayId, rssi, snr, frequency, channel, crcStatus, uplinkId, latitude, longitude, spreadingFactor, bandwidth, f_cnt, raw)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [manufacturer, voltage, currentMA, power, energy, timestamp, gatewayId, rssi, snr, frequency, channel, crcStatus, uplinkId, latitude, longitude, spreadingFactor, bandwidth, f_cnt, JSON.stringify(raw)],
-        function(err) {
-          if (err) {
-            console.error('❌ Erro ao inserir dados:', err.message);
-            reject(err);
-          } else {
-            console.log('💾 Dados guardados na BD (ID: ' + this.lastID + ')');
-            resolve(this.lastID);
-          }
-        }
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       );
+      const result = insertStmt.run(manufacturer, voltage, currentMA, power, energy, timestamp, gatewayId, rssi, snr, frequency, channel, crcStatus, uplinkId, latitude, longitude, spreadingFactor, bandwidth, f_cnt, JSON.stringify(raw));
+      
+      console.log('💾 Dados guardados na BD (ID: ' + result.lastInsertRowid + ')');
 
       // Update last_data (cache table - apenas 1 linha)
-      this.db.run(
-        `DELETE FROM last_data`,
-        (err) => {
-          if (err) console.error('Erro ao limpar last_data:', err.message);
-          
-          this.db.run(
-            `INSERT INTO last_data (manufacturer, voltage, currentMA, power, energy, timestamp, gatewayId, rssi, snr, frequency, channel, crcStatus, uplinkId, latitude, longitude, spreadingFactor, bandwidth, f_cnt, raw)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [manufacturer, voltage, currentMA, power, energy, timestamp, gatewayId, rssi, snr, frequency, channel, crcStatus, uplinkId, latitude, longitude, spreadingFactor, bandwidth, f_cnt, JSON.stringify(raw)],
-            (err) => {
-              if (err) {
-                console.error('❌ Erro ao atualizar last_data:', err.message);
-              } else {
-                console.log('⚡ Cache rápido atualizado');
-              }
-            }
-          );
-        }
+      const deleteStmt = this.db.prepare(`DELETE FROM last_data`);
+      deleteStmt.run();
+
+      const updateStmt = this.db.prepare(
+        `INSERT INTO last_data (manufacturer, voltage, currentMA, power, energy, timestamp, gatewayId, rssi, snr, frequency, channel, crcStatus, uplinkId, latitude, longitude, spreadingFactor, bandwidth, f_cnt, raw)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       );
-    });
+      updateStmt.run(manufacturer, voltage, currentMA, power, energy, timestamp, gatewayId, rssi, snr, frequency, channel, crcStatus, uplinkId, latitude, longitude, spreadingFactor, bandwidth, f_cnt, JSON.stringify(raw));
+      console.log('⚡ Cache rápido atualizado');
+
+      return result.lastInsertRowid;
+    } catch (err) {
+      console.error('❌ Erro ao inserir dados:', err.message);
+      throw err;
+    }
   }
 
   /**
    * Get latest data from cache
-   * @returns {Promise<Object|null>}
+   * @returns {Object|null}
    */
-  async getLatestData() {
-    return new Promise((resolve, reject) => {
-      this.db.get(
-        `SELECT * FROM last_data ORDER BY timestamp DESC LIMIT 1`,
-        (err, row) => {
-          if (err) {
-            console.error('❌ Erro ao buscar último dado:', err.message);
-            reject(err);
-          } else {
-            if (row) {
-              row.raw = JSON.parse(row.raw || '{}');
-            }
-            resolve(row || null);
-          }
-        }
+  getLatestData() {
+    try {
+      const stmt = this.db.prepare(
+        `SELECT * FROM last_data ORDER BY timestamp DESC LIMIT 1`
       );
-    });
+      const row = stmt.get();
+      
+      if (row) {
+        row.raw = JSON.parse(row.raw || '{}');
+      }
+      return row || null;
+    } catch (err) {
+      console.error('❌ Erro ao buscar último dado:', err.message);
+      throw err;
+    }
   }
 
   /**
@@ -170,42 +149,37 @@ class Database {
    * @param {Object} options - Filter options
    * @param {number} options.limit - Número máximo de resultados (default: 100)
    * @param {number} options.offset - Para pagination (default: 0)
-   * @param {string} options.hours - Últimas N horas (default: 24)
-   * @returns {Promise<Array>}
+   * @param {number} options.hours - Últimas N horas (default: 24)
+   * @returns {Array}
    */
-  async getHistory(options = {}) {
-    const limit = options.limit || 100;
-    const offset = options.offset || 0;
-    const hours = options.hours || 24;
+  getHistory(options = {}) {
+    try {
+      const limit = options.limit || 100;
+      const offset = options.offset || 0;
+      const hours = options.hours || 24;
 
-    return new Promise((resolve, reject) => {
-      this.db.all(
+      const stmt = this.db.prepare(
         `SELECT id, manufacturer, voltage, currentMA, power, energy, timestamp
          FROM sensor_data
          WHERE timestamp > datetime('now', '-' || ? || ' hours')
          ORDER BY timestamp DESC
-         LIMIT ? OFFSET ?`,
-        [hours, limit, offset],
-        (err, rows) => {
-          if (err) {
-            console.error('❌ Erro ao buscar histórico:', err.message);
-            reject(err);
-          } else {
-            resolve(rows || []);
-          }
-        }
+         LIMIT ? OFFSET ?`
       );
-    });
+      return stmt.all(hours, limit, offset) || [];
+    } catch (err) {
+      console.error('❌ Erro ao buscar histórico:', err.message);
+      throw err;
+    }
   }
 
   /**
    * Get data statistics for a time period
    * @param {number} hours - Last N hours
-   * @returns {Promise<Object>}
+   * @returns {Object}
    */
-  async getStats(hours = 24) {
-    return new Promise((resolve, reject) => {
-      this.db.get(
+  getStats(hours = 24) {
+    try {
+      const stmt = this.db.prepare(
         `SELECT 
           COUNT(*) as count,
           AVG(voltage) as avgVoltage,
@@ -215,83 +189,66 @@ class Database {
           MIN(power) as minPower,
           MAX(energy) as maxEnergy
          FROM sensor_data
-         WHERE timestamp > datetime('now', '-' || ? || ' hours')`,
-        [hours],
-        (err, row) => {
-          if (err) {
-            console.error('❌ Erro ao buscar estatísticas:', err.message);
-            reject(err);
-          } else {
-            resolve(row || null);
-          }
-        }
+         WHERE timestamp > datetime('now', '-' || ? || ' hours')`
       );
-    });
+      return stmt.get(hours) || null;
+    } catch (err) {
+      console.error('❌ Erro ao buscar estatísticas:', err.message);
+      throw err;
+    }
   }
 
   /**
    * Get time since last sensor update
-   * @returns {Promise<number>} Minutes since last update (null if no data)
+   * @returns {number|null} Minutes since last update (null if no data)
    */
-  async getMinutesSinceLastUpdate() {
-    return new Promise((resolve, reject) => {
-      this.db.get(
+  getMinutesSinceLastUpdate() {
+    try {
+      const stmt = this.db.prepare(
         `SELECT 
           ROUND((julianday('now') - julianday(MAX(timestamp))) * 24 * 60) as minutes
-         FROM sensor_data`,
-        (err, row) => {
-          if (err) {
-            console.error('❌ Erro ao buscar tempo:', err.message);
-            reject(err);
-          } else {
-            resolve(row?.minutes || null);
-          }
-        }
+         FROM sensor_data`
       );
-    });
+      const row = stmt.get();
+      return row?.minutes || null;
+    } catch (err) {
+      console.error('❌ Erro ao buscar tempo:', err.message);
+      throw err;
+    }
   }
 
   /**
    * Clear old data (older than specified days)
    * @param {number} days - Delete records older than N days
-   * @returns {Promise<void>}
+   * @returns {number} Number of deleted rows
    */
-  async clearOldData(days = 30) {
-    return new Promise((resolve, reject) => {
-      this.db.run(
-        `DELETE FROM sensor_data WHERE timestamp < datetime('now', '-' || ? || ' days')`,
-        [days],
-        function(err) {
-          if (err) {
-            console.error('❌ Erro ao limpar dados antigos:', err.message);
-            reject(err);
-          } else {
-            console.log(`🗑️  Apagados ${this.changes} registos antigos (>` + days + ' dias)');
-            resolve();
-          }
-        }
+  clearOldData(days = 30) {
+    try {
+      const stmt = this.db.prepare(
+        `DELETE FROM sensor_data WHERE timestamp < datetime('now', '-' || ? || ' days')`
       );
-    });
+      const result = stmt.run(days);
+      console.log(`🗑️  Apagados ${result.changes} registos antigos (>${days} dias)`);
+      return result.changes;
+    } catch (err) {
+      console.error('❌ Erro ao limpar dados antigos:', err.message);
+      throw err;
+    }
   }
 
   /**
    * Close database connection
-   * @returns {Promise<void>}
    */
-  async close() {
-    return new Promise((resolve, reject) => {
-      this.db.close((err) => {
-        if (err) {
-          console.error('❌ Erro ao fechar DB:', err.message);
-          reject(err);
-        } else {
-          console.log('✓ Base de dados desconectada');
-          resolve();
-        }
-      });
-    });
+  close() {
+    try {
+      this.db.close();
+      console.log('✓ Base de dados desconectada');
+    } catch (err) {
+      console.error('❌ Erro ao fechar DB:', err.message);
+      throw err;
+    }
   }
 }
 
 // Export singleton instance
-module.exports = new Database();
+module.exports = new DatabaseManager();

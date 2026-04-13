@@ -347,7 +347,7 @@ app.post("/uplink", async (req, res) => {
       raw: JSON.stringify(decodedObject).slice(0, 2000) // Limita tamanho
     };
     
-    await db.saveSensorData(dataToStore);
+    db.saveSensorData(dataToStore);
     
     res.status(200).json({ success: true, message: "Dados recebidos" });
   } catch (error) {
@@ -359,7 +359,7 @@ app.post("/uplink", async (req, res) => {
 
 app.get("/latest-data", async (req, res) => {
   try {
-    const lastData = await db.getLatestData();
+    const lastData = db.getLatestData();
     if (!lastData) {
       res.status(204).send(); // Sem conteúdo - ainda a aguardar dados
       return;
@@ -376,8 +376,8 @@ app.get("/latest-data", async (req, res) => {
 
 app.get("/health", async (req, res) => {
   try {
-    const lastData = await db.getLatestData();
-    const minutesSinceLastUpdate = await db.getMinutesSinceLastUpdate();
+    const lastData = db.getLatestData();
+    const minutesSinceLastUpdate = db.getMinutesSinceLastUpdate();
     
     // Cache por 10 segundos
     res.set('Cache-Control', 'public, max-age=10');
@@ -405,7 +405,7 @@ app.get("/history", async (req, res) => {
       return res.status(400).json({ error: "Parâmetros inválidos" });
     }
     
-    const history = await db.getHistory({ limit, hours });
+    const history = db.getHistory({ limit, hours });
     
     // Cache por 5 minutos
     res.set('Cache-Control', 'public, max-age=300');
@@ -428,7 +428,7 @@ app.get("/stats", async (req, res) => {
       return res.status(400).json({ error: "Parâmetros inválidos" });
     }
     
-    const stats = await db.getStats(hours);
+    const stats = db.getStats(hours);
     
     // Cache por 10 minutos (stats mudam devagar)
     res.set('Cache-Control', 'public, max-age=600');
@@ -469,7 +469,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 process.on("SIGTERM", async () => {
   console.log("🛑 SIGTERM recebido, encerrando gracefully...");
   server.close(async () => {
-    await db.close();
+    db.close();
     console.log("✓ Servidor encerrado");
     process.exit(0);
   });
@@ -478,7 +478,7 @@ process.on("SIGTERM", async () => {
 process.on("SIGINT", async () => {
   console.log("🛑 SIGINT recebido, encerrando...");
   server.close(async () => {
-    await db.close();
+    db.close();
     console.log("✓ Servidor encerrado");
     process.exit(0);
   });
